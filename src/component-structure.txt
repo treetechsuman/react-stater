@@ -1,0 +1,42 @@
+src/
+├── components/
+│   ├── common/            # For shared and reusable components (mostly React-Bootstrap)
+│   │   ├── Button.jsx
+│   │   ├── Modal.jsx
+│   │   ├── Navbar.jsx
+│   │   ├── FormInput.jsx
+│   │   └── Pagination.jsx
+│   ├── custom/            # For custom-built components (unique designs or behaviors)
+│   │   ├── CustomCarousel.jsx
+│   │   ├── Sidebar.jsx
+│   │   ├── UserCard.jsx
+│   │   └── RatingStar.jsx
+│   ├── layout/            # Layout-related components
+│   │   ├── Header.jsx
+│   │   ├── Footer.jsx
+│   │   └── Container.jsx
+│   └── index.js           # Barrel file to export all components
+├── hooks/                 # Custom React hooks (optional, e.g., for shared logic)
+│   ├── useFetchData.js
+│   └── useWindowSize.js
+├── pages/                 # Page-level components
+│   ├── HomePage.jsx
+│   ├── AboutPage.jsx
+│   ├── ContactPage.jsx
+│   └── DashboardPage.jsx
+├── styles/                # Global or component-specific styles
+│   ├── global.css
+│   └── components/
+│       ├── Button.module.css
+│       ├── CustomCarousel.module.css
+│       └── Sidebar.module.css
+├── utils/                 # Utility functions (optional)
+│   ├── api.js
+│   └── helpers.js
+├── App.jsx
+└── index.js
+
+<MobileNav brand={brand} links={links} bg="dark" variant="dark" ></MobileNav>
+ <Nav brand={brand}></Nav>
+
+ 9814943088
