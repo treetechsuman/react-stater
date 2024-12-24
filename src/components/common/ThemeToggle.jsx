@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useTheme } from "../layout/ThemeContext";
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState(() => {
-    // Load the saved theme from localStorage or default to "light"
-    return localStorage.getItem("theme") || "light";
-  });
+    const { theme, toggleTheme } = useTheme(); // Get the current theme and toggle function from context
 
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme); // Save the selected theme
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
+  
 
-  useEffect(() => {
-    // Apply the saved or default theme on initial load
-    document.documentElement.setAttribute("data-theme", theme);
-  }, [theme]);
-
+  
   return (
     <div className="p-4">
-      <button className="btn btn-primary btn-xs" href="#" onClick={toggleTheme}>
+      <button className="btn btn-primary" href="#" onClick={toggleTheme}>
         {theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
       </button>
     </div>

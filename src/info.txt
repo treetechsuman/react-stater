@@ -1,0 +1,5 @@
+to install react 19
+    npm install --save-exact react@^19.0.0 react-dom@^19.0.0
+
+icons
+    https://heroicons.com/
