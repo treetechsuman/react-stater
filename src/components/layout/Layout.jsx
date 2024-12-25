@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Nav brand={brand} links={links} />
-      <main className="p-6 pt-10 text-center">
+      <main className="md:container md:mx-auto px-8">
         <Outlet /> {/* Renders the child routes */}
       </main>
       <BottomNav bottomLinks={bottomLinks}></BottomNav>

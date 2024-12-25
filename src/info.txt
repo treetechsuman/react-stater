@@ -3,3 +3,9 @@ to install react 19
 
 icons
     https://heroicons.com/
+
+run in 192.168.1.105:5173 (in vite.config.js)
+    server: {
+    host: '0.0.0.0', // Binds to all network interfaces
+    port: 5173,      // Optional: Specify a custom port
+  },

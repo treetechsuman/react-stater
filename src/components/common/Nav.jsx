@@ -1,47 +1,88 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ThemeToggle from "./ThemeToggle";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import BarIcon from "./icons/BarIcon";
+import CrossIcon from "./icons/CrossIcon"; // Assuming you have a CrossIcon component
 const Nav = ({ brand, links }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prev) => !prev);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+    //alert("closeDropdown is trigger");
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        //alert("clicked out side");
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-            <BarIcon/>
-          </div>
-          <ul
+          <div
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            role="button"
+            className="btn btn-ghost lg:hidden"
+            onClick={toggleDropdown}
           >
-            {links.map((link, index) => (
-              <li key={index}>
-                <Link
+            {isDropdownOpen ? <CrossIcon /> : <BarIcon />}
+          </div>
+          {isDropdownOpen && (
+            <ul
+              ref={dropdownRef}
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              {links.map((link, index) => (
+                <li key={index}>
+                  <NavLink
                     to={link.path}
-                >{link.label}</Link>
-              </li>
-            ))}
-          </ul>
+                    className={ ({ isActive }) => (isActive ? "active" : "")}
+                    onClick={closeDropdown}
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        <Link 
-            className="btn btn-ghost text-xl"
-            to={brand.path}
-            >{brand.name}</Link>
+        <NavLink className="btn btn-ghost text-xl" to={brand.path}>
+          {brand.name}
+        </NavLink>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
-        {links.map((link, index) => (
-              <li key={index}>
-                <Link
-                    to={link.path}
-                >{link.label}</Link>
-              </li>
-            ))}
-            
+          {links.map((link, index) => (
+            <li key={index}>
+              <NavLink
+                to={link.path}
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                {link.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        <a className="btn btn-sm">Button</a>
         <ThemeToggle></ThemeToggle>
       </div>
     </div>
