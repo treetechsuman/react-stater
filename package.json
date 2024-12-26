@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:page":"node generatePage.js",
+    "generate:component": "node generateComponent.js"
   },
   "dependencies": {
     "react": "19.0.0",

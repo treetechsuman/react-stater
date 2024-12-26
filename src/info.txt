@@ -9,3 +9,17 @@ run in 192.168.1.105:5173 (in vite.config.js)
     host: '0.0.0.0', // Binds to all network interfaces
     port: 5173,      // Optional: Specify a custom port
   },
+
+  To generate page run
+    npm run generate:page PageName
+    what this will do?
+    -create newpage in src/pages
+    -import this page in appConfig.js
+    -add links in appConfig.js for routing
+    once you run this you can see new link on top nav with routing intigrated
+
+ To generate component run this
+    npm run generate:compoent common/ComponentName
+    what this will do?
+    create ComponentName compoent in components/common folder
+    -if you wanna create component in side coustom just do custom/CompoentName
