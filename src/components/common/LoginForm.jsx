@@ -1,12 +1,28 @@
 import React from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login";
 
 const LoginForm = ({}) => {
+  const handleGoogleSuccess = (response) => {
+    console.log("Google login success", response);
+    // Handle the login success with response.credential
+  };
+
+  const handleGoogleFailure = (error) => {
+    console.log("Google login failed", error);
+    // Handle login failure
+  };
+
+  const responseFacebook = (response) => {
+    console.log("Facebook login response", response);
+    // Handle Facebook login response
+  };
+
   return (
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
-        <h2 className="text-center text-2xl font-bold mb-4">
-          Login
-        </h2>
+        <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
+
         <label className="input input-bordered flex items-center gap-2 mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,9 +60,40 @@ const LoginForm = ({}) => {
           />
         </label>
 
-        <button className="btn btn-primary w-full mt-4">
-          Login
-        </button>
+        <button className="btn btn-primary w-full mt-4">Login</button>
+
+        {/* Forgot Password and Register Links */}
+        <div className="mt-4 text-center">
+          <a href="/forgot-password" className="text-sm hover:underline">
+            Forgot Password?
+          </a>
+          <div className="mt-2">
+            <a href="/register" className="text-sm hover:underline">
+              Don't have an account? Register
+            </a>
+          </div>
+        </div>
+
+        {/* Social Media Login Buttons */}
+        <div className="mt-4 text-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onFailure={handleGoogleFailure}
+            useOneTap
+            theme="outline"
+            className="btn btn-outline w-full mb-2"
+          >
+            Login with Google
+          </GoogleLogin>
+
+          <FacebookLogin
+            appId="YOUR_FACEBOOK_APP_ID" // Replace with your Facebook App ID
+            fields="name,email,picture"
+            callback={responseFacebook}
+            cssClass="btn btn-outline w-full mt-2"
+            textButton="Login with Facebook"
+          />
+        </div>
       </div>
     </div>
   );
