@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-import FacebookLogin from "react-facebook-login";
+import { Link } from "react-router-dom";
 
 const LoginForm = ({}) => {
   const handleGoogleSuccess = (response) => {
@@ -64,13 +64,13 @@ const LoginForm = ({}) => {
 
         {/* Forgot Password and Register Links */}
         <div className="mt-4 text-center">
-          <a href="/forgot-password" className="text-sm hover:underline">
+          <Link to="/forgotpassword" className="text-sm hover:underline">
             Forgot Password?
-          </a>
+          </Link>
           <div className="mt-2">
-            <a href="/register" className="text-sm hover:underline">
+            <Link to="/register" className="text-sm hover:underline">
               Don't have an account? Register
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -85,14 +85,6 @@ const LoginForm = ({}) => {
           >
             Login with Google
           </GoogleLogin>
-
-          <FacebookLogin
-            appId="YOUR_FACEBOOK_APP_ID" // Replace with your Facebook App ID
-            fields="name,email,picture"
-            callback={responseFacebook}
-            cssClass="btn btn-outline w-full mt-2"
-            textButton="Login with Facebook"
-          />
         </div>
       </div>
     </div>
