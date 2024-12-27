@@ -1,6 +1,11 @@
 to install react 19
     npm install --save-exact react@^19.0.0 react-dom@^19.0.0
-
+clone from https://github.com/treetechsuman/react-stater.git
+cd into react-stater
+run npm install
+run npm run dev
+enjoy
+configure app setting in appConfig file inside src
 icons
     https://heroicons.com/
 

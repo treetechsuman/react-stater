@@ -39,7 +39,7 @@ Welcome to the **React Starter Kit**! Follow the steps below to set up and start
    npm run dev
    ```
    Access the application at:  
-   **http://192.168.1.105:5173**
+   **http://192.168.-.---:5173**
 
 ---
 
@@ -51,13 +51,7 @@ Configure application settings in the `appConfig.js` file located in the `src` f
 ### Icons
 For icons, visit: **[Heroicons](https://heroicons.com/)**.
 
-### Server Settings
-To bind the development server to all network interfaces and configure the port, modify the `vite.config.js` file as follows:  
-```javascript
-server: {
-  host: '0.0.0.0', // Binds to all network interfaces
-  port: 5173,      // Specify a custom port (optional)
-},
+
 ```
 
 ---
