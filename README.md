@@ -52,9 +52,9 @@ Configure application settings in the `appConfig.js` file located in the `src` f
 For icons, visit: **[Heroicons](https://heroicons.com/)**.
 
 
-```
 
----
+
+
 
 ## **Page and Component Generation**
 
