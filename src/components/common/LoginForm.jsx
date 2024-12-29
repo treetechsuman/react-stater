@@ -1,8 +1,22 @@
-import React from "react";
-import { GoogleLogin } from "@react-oauth/google";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+//import { GoogleLogin } from "@react-oauth/google";
+import { Link , useNavigate } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import axios from 'axios';
 
 const LoginForm = ({}) => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { authenticate, loading, error } = useAuth();
+
+ 
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    authenticate(email, password);
+  };
+
   const handleGoogleSuccess = (response) => {
     console.log("Google login success", response);
     // Handle the login success with response.credential
@@ -13,16 +27,12 @@ const LoginForm = ({}) => {
     // Handle login failure
   };
 
-  const responseFacebook = (response) => {
-    console.log("Facebook login response", response);
-    // Handle Facebook login response
-  };
-
+  
   return (
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Login</h2>
-
+        <form onSubmit={handleSubmit}>
         <label className="input input-bordered flex items-center gap-2 mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,8 +45,11 @@ const LoginForm = ({}) => {
           </svg>
           <input
             type="text"
+            name="email"
             className="grow bg-transparent"
+            value={email}
             placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
           />
         </label>
 
@@ -57,11 +70,18 @@ const LoginForm = ({}) => {
             type="password"
             className="grow bg-transparent"
             placeholder="Password"
+            value={password}
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
           />
         </label>
 
-        <button className="btn btn-primary w-full mt-4">Login</button>
-
+        <button 
+          className="btn btn-primary w-full mt-4"
+          disabled={loading}
+          >{loading ? 'Logging in...' : 'Log In'}</button>
+        </form>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         {/* Forgot Password and Register Links */}
         <div className="mt-4 text-center">
           <Link to="/forgotpassword" className="text-sm hover:underline">
@@ -74,18 +94,7 @@ const LoginForm = ({}) => {
           </div>
         </div>
 
-        {/* Social Media Login Buttons */}
-        <div className="mt-4 text-center">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onFailure={handleGoogleFailure}
-            useOneTap
-            theme="outline"
-            className="btn btn-outline w-full mb-2"
-          >
-            Login with Google
-          </GoogleLogin>
-        </div>
+        
       </div>
     </div>
   );

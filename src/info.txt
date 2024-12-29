@@ -28,3 +28,17 @@ run in 192.168.1.105:5173 (in vite.config.js)
     what this will do?
     create ComponentName compoent in components/common folder
     -if you wanna create component in side coustom just do custom/CompoentName
+
+
+    {/* Social Media Login Buttons */}
+        <div className="mt-4 text-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onFailure={handleGoogleFailure}
+            useOneTap
+            theme="outline"
+            className="btn btn-outline w-full mb-2"
+          >
+            Login with Google
+          </GoogleLogin>
+        </div>

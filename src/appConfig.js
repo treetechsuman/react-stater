@@ -1,3 +1,4 @@
+import Logout from './pages/Logout';
 import ResetPassword from './pages/ResetPassword';
 import ForgotPassword from "./pages/ForgotPassword";
 
@@ -24,6 +25,7 @@ export const links = [
   { label: "Register", path: "/register", component: Register },
   
     
+    { label: "Logout", path: "/logout", component: Logout },
 ];
 
 export const bottomLinks = [
@@ -40,6 +42,19 @@ export const hiddenLinks = [
   },
   { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
 ]
+
+export const proctedLinks = [
+  {
+    label: "ForgotPassword",
+    path: "/forgotpassword",
+    component: ForgotPassword,
+  },
+  { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
+  { label: "Profile", path: "/profile", icon: ProfileIcon, component: Profile },
+]
+
+
+
 
 export const navSettings = {
   fixed: true, // Whether the navbar should fixed to the top
