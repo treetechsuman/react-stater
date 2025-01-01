@@ -1,10 +1,14 @@
 import React from "react";
-import { useAuth } from "../components/common/AuthContext";
+import AuthAPI from "../api/authAPI";
+import { Link, useNavigate } from "react-router-dom";
 
 const LogoutButton = () => {
-  const { logout } = useAuth();
-
-  return <button className="btn btn-primary w-full mt-4" onClick={logout}>Logout</button>;
+   const navigate = useNavigate();
+  const handleLogout = () => {
+    AuthAPI.logout(); // Call the logout function from AuthAPI
+    navigate("/login"); // Redirect to a secure route
+  };
+  return <button className="btn btn-primary w-full mt-4" onClick={handleLogout}>Logout</button>;
 };
 
 export default LogoutButton;

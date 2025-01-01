@@ -1,14 +1,14 @@
 import React , { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchUserProfile } from "../utils/api";
-import useAuth from "../hooks/useAuth";
-import axios from "axios";
+import UserAPI from '../api/userAPI'
+import { useAPI } from "../hooks/useAPI";
+import Message from "../components/common/Message";
 
 const Profile = () => {
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("info")
   const [user, setUser] = useState({ first_name: '', last_name: '', email: '' });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
- // const { updateProfile, loading, error } = useAuth();
+  const { loading, error } = useAPI();
   const handleChange = (event) => {
     const { name, value } = event.target;
     setUser(prevUser => ({
@@ -16,76 +16,53 @@ const Profile = () => {
       [name]: value
     }));
   };
-  const updateProfile = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError('Authentication required.');
-      return;
-    }
-  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      // Assuming your API endpoint for updating user profile looks similar to this
-      const response = await axios.put('http://127.0.0.1:8000/auth/users/me/', user, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      console.log('Profile updated successfully:', response.data);
-      // Maybe set user state if response includes updated data
-      setUser(response.data);
-      setSuccess(true);
+      await UserAPI.updateProfile(user);
+      setMessageType("success");
+      setMessage("Action completed successfully!");
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setError('Failed to update profile.');
+      console.error("Error updating profile:", error);
+      setMessageType("error");
+      setMessage("An error occurred. Please try again.",error);
     }
   };
+  //alert(localStorage.getItem("refresh_token"));
 
   useEffect(() => {
-    const loadUserProfile = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        setError('Authentication required.');
-        return;
-      }
-  
+    const fetchUserDetails = async () => {
       try {
-        //alert(accessToken)
-        const response = await fetchUserProfile(accessToken);
-        console.log("API Response:", response.data); // Again, checking the actual data received
-        //alert(response.data)
-        setUser(response.data);
+        const userDetails = await UserAPI.getUserDetails();
+        setMessageType("success");
+        setMessage("Action completed successfully!");
+        setUser(userDetails);
       } catch (error) {
-        console.error("Error accessing protected endpoint:", error);
-        setError('Error fetching user profile.');
+        console.error("Error fetching user details:", error);
+        setMessageType("error");
+        setMessage("Error fetching user details:", error);
       }
     };
-  
-    loadUserProfile();
+    fetchUserDetails();
   }, []);
-  if (error) {
-    return <div className="error">{error}</div>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  if (!user) {
-    return <div>Loading...</div>;
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
   }
   return (
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Profile</h2>
         <h2 className="text-center text-2xl font-bold mb-4">wel come {user.email}</h2>
-
-        {error && (
-          <div className="text-red-500 text-sm mb-4">
-            {typeof error === "string" ? error : JSON.stringify(error)}
-          </div>
-        )}
-
-        {success && (
-          <div className="text-green-500 text-sm mb-4">
-            Update successful!
-          </div>
-        )}
+        <Message
+          message={message}
+          type={messageType}
+          onClose={() => setMessage("")} // Hide the message when close button is clicked
+        />
+        
         <label className="input input-bordered flex items-center gap-2 mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +83,7 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="First Name"
-            value={user.first_name}
+            value={user.first_name || ""}
             name="first_name"
             onChange={handleChange}
             
@@ -132,7 +109,7 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="Last Name"
-            value={user.last_name}
+            value={user.last_name || ""}
             name="last_name"
             onChange={handleChange}
           />
@@ -151,13 +128,13 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="Email"
-            value={user.email}
+            value={user.email || ""}
             name="email"
             onChange={handleChange}
             disabled
           />
         </label>
-        <button className="btn btn-primary w-full mt-4" onClick={updateProfile}>Update</button>
+        <button className="btn btn-primary w-full mt-4" onClick={handleSubmit}>Update</button>
         {/* Reset password Links */}
         <div className="mt-4 text-center">
         {error && <p style={{ color: 'red' }}>{error}</p>}
