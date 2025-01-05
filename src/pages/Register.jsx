@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Message from "../components/common/Message";
 import AuthAPI from "../api/authAPI";
+import { useFlash } from "../components/common/FlashContext";
+import Loading from "../components/common/Loading";
+import { useAPI } from "../hooks/useAPI";
 const Register = () => {
-
-  const [message,setMessage]= useState("");
-  const [messageType,setMessageType]=useState("info");
+  const { execute, loading, error } = useAPI();
+  const { addMessage } = useFlash();
   const [formData, setFormData] = useState({
-    username: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     re_password: "",
@@ -22,15 +25,17 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const result = await AuthAPI.register(formData);
-      setMessageType("success");
-      setMessage("Registration  completed successfully!");
+      const result = await execute(AuthAPI.register, formData);
+
+      addMessage(
+        "Registration  completed successfully! Now Login and Enjoy!!",
+        "success"
+      );
       console.log("Registration successful:", result);
       navigate("/login"); // Redirect to a secure route
     } catch (err) {
-      setMessageType("error");
-      setMessage("Error while registering Please try again.",);
-      
+      addMessage("Error while registering Please try again.", "error");
+
       console.error("Error during registering:", err);
     }
   };
@@ -39,26 +44,30 @@ const Register = () => {
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Register</h2>
-        <Message
-          message={message}
-          type={messageType}
-          onClose={() => setMessage("")} // Hide the message when close button is clicked
-        />
-        
 
         <form onSubmit={handleSubmit}>
           <label className="input input-bordered flex items-center gap-2 mt-2">
             <input
               type="text"
-              name="username"
-              value={formData.username}
+              name="first_name"
+              value={formData.first_name}
               onChange={handleChange}
               className="grow bg-transparent"
-              placeholder="Username"
+              placeholder="First Name"
               required
             />
           </label>
-
+          <label className="input input-bordered flex items-center gap-2 mt-2">
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              className="grow bg-transparent"
+              placeholder="Last Name"
+              required
+            />
+          </label>
           <label className="input input-bordered flex items-center gap-2 mt-2">
             <input
               type="email"
@@ -96,7 +105,7 @@ const Register = () => {
           </label>
 
           <button type="submit" className="btn btn-primary w-full mt-4">
-            Register
+            {loading ? <Loading></Loading> : "Register"}
           </button>
         </form>
 

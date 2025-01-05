@@ -1,31 +1,35 @@
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import UserAPI from '../api/userAPI'
+import UserAPI from "../api/userAPI";
 import { useAPI } from "../hooks/useAPI";
 import Message from "../components/common/Message";
+import { useFlash } from "../components/common/FlashContext";
+import Loading from "../components/common/Loading";
 
 const Profile = () => {
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("info")
-  const [user, setUser] = useState({ first_name: '', last_name: '', email: '' });
-  const { loading, error } = useAPI();
+  const { execute, loading, error } = useAPI();
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+  });
+
+  const { addMessage } = useFlash();
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUser(prevUser => ({
+    setUser((prevUser) => ({
       ...prevUser,
-      [name]: value
+      [name]: value,
     }));
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await UserAPI.updateProfile(user);
-      setMessageType("success");
-      setMessage("Action completed successfully!");
+      const result = await execute(UserAPI.updateProfile, user);
+      addMessage("Profile updated successfully!", "success");
     } catch (error) {
       console.error("Error updating profile:", error);
-      setMessageType("error");
-      setMessage("An error occurred. Please try again.",error);
+      addMessage("An error occurred. Please try again.", "error");
     }
   };
   //alert(localStorage.getItem("refresh_token"));
@@ -33,36 +37,25 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const userDetails = await UserAPI.getUserDetails();
-        setMessageType("success");
-        setMessage("Action completed successfully!");
+        const userDetails = await execute(UserAPI.getUserDetails);
         setUser(userDetails);
+        addMessage("Profile loaded successfully!", "success");
       } catch (error) {
         console.error("Error fetching user details:", error);
-        setMessageType("error");
-        setMessage("Error fetching user details:", error);
+        addMessage("Error fetching user details:", "error");
       }
     };
     fetchUserDetails();
-  }, []);
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  }, [execute]);
 
-  if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
   return (
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Profile</h2>
-        <h2 className="text-center text-2xl font-bold mb-4">wel come {user.email}</h2>
-        <Message
-          message={message}
-          type={messageType}
-          onClose={() => setMessage("")} // Hide the message when close button is clicked
-        />
-        
+        <h2 className="text-center text-2xl font-bold mb-4">
+          wel come {user.email}
+        </h2>
+
         <label className="input input-bordered flex items-center gap-2 mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +79,6 @@ const Profile = () => {
             value={user.first_name || ""}
             name="first_name"
             onChange={handleChange}
-            
           />
         </label>
         <label className="input input-bordered flex items-center gap-2 mt-2">
@@ -134,10 +126,11 @@ const Profile = () => {
             disabled
           />
         </label>
-        <button className="btn btn-primary w-full mt-4" onClick={handleSubmit}>Update</button>
+        <button className="btn btn-primary w-full mt-4" onClick={handleSubmit}>
+          {loading ? <Loading></Loading> : "Update"}
+        </button>
         {/* Reset password Links */}
         <div className="mt-4 text-center">
-        {error && <p style={{ color: 'red' }}>{error}</p>}
           <Link to="/resetpassword" className="text-sm hover:underline">
             Reset password
           </Link>

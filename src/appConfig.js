@@ -1,5 +1,5 @@
-import Logout from './pages/Logout';
-import ResetPassword from './pages/ResetPassword';
+import Logout from "./pages/Logout";
+import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 
 import Register from "./pages/Register";
@@ -23,9 +23,8 @@ export const links = [
   { label: "About", path: "/about", component: About },
   { label: "Login", path: "/login", component: Login },
   { label: "Register", path: "/register", component: Register },
-  
-    
-    { label: "Logout", path: "/logout", component: Logout },
+
+  { label: "Logout", path: "/logout", component: Logout },
 ];
 
 export const bottomLinks = [
@@ -41,7 +40,7 @@ export const hiddenLinks = [
     component: ForgotPassword,
   },
   { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
-]
+];
 
 export const proctedLinks = [
   {
@@ -51,11 +50,12 @@ export const proctedLinks = [
   },
   { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
   { label: "Profile", path: "/profile", icon: ProfileIcon, component: Profile },
-]
-
-
-
+];
 
 export const navSettings = {
   fixed: true, // Whether the navbar should fixed to the top
+};
+
+export const appSettings = {
+  isDevelopment: false,
 };

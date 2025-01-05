@@ -11,12 +11,12 @@ const apiClient = axios.create({
 
 // Refresh token utility
 const refreshToken = async () => {
-  alert("refreshToken is call with :", localStorage.getItem("refresh_token"))
+  //alert("refreshToken is call with :", localStorage.getItem("refresh_token"));
   try {
     const refresh = localStorage.getItem("refresh_token");
-    const response = await axios.post("auth/jwt/refresh/", { refresh });
+    const response = await apiClient.post("auth/jwt/refresh/", { refresh });
     const newAccessToken = response.data.access;
-    alert("refresh token function",response.data);
+    //alert("refresh token function", response.data);
     localStorage.setItem("access_token", newAccessToken);
     return newAccessToken;
   } catch (err) {
@@ -50,13 +50,29 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const newAccessToken = await refreshToken();
-        apiClient.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+        apiClient.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${newAccessToken}`;
         originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
         return apiClient(originalRequest);
       } catch (err) {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        return Promise.reject(err);
+        const statusCode = err.response?.status;
+        const errorMessage = err.response?.data?.detail || err.message;
+
+        console.error("Error refreshing token:", errorMessage);
+
+        // Check if the error is due to an invalid refresh token
+        if (statusCode === 401 && errorMessage.includes("Invalid token")) {
+          console.error("Invalid refresh token. Logging out.");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          window.location.href = "/login"; // Redirect to login page
+        } else {
+          // Handle other errors (e.g., network issues)
+          console.error(
+            "Refresh failed due to other reasons. Retaining refresh token."
+          );
+        }
       }
     }
     return Promise.reject(error);

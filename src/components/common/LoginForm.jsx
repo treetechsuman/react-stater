@@ -3,11 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAPI } from "../../hooks/useAPI";
 //import AuthAPI from "../../utils/authAPI";
 import AuthAPI from "../../api/authAPI";
-import { FlashProvider, useFlash } from "./FlashContext";
+import { useFlash } from "./FlashContext";
+import Loading from "./Loading";
 
 const LoginForm = () => {
   const { execute, loading, error } = useAPI();
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({
+    email: "me.suman11@gmail.com",
+    password: "admin",
+  });
   const navigate = useNavigate();
   const { addMessage } = useFlash();
   const handleInputChange = (e) => {
@@ -21,11 +25,11 @@ const LoginForm = () => {
       const result = await execute(AuthAPI.login, credentials);
       addMessage("login successful", "success");
       console.log("Login successful:", result);
-      //navigate("/profile"); // Redirect to a secure route
+      navigate("/profile"); // Redirect to a secure route
     } catch (err) {
       // Friendly error messages
       if (err?.response?.status === 401) {
-        addMessage("Invalid email or password. Please try again.", "error");
+        addMessage("Invalid email or password. Please try again. ", "error");
       } else if (!err?.response) {
         addMessage("Network error. Please check your connection.", "error");
       } else {
@@ -86,33 +90,7 @@ const LoginForm = () => {
           </label>
 
           <button className="btn btn-primary w-full mt-4" disabled={loading}>
-            {loading ? (
-              <span className="flex items-center justify-center">
-                <svg
-                  className="animate-spin h-5 w-5 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  ></path>
-                </svg>
-                Logging in...
-              </span>
-            ) : (
-              "Log In"
-            )}
+            {loading ? <Loading></Loading> : "Log In"}
           </button>
         </form>
 
