@@ -1,37 +1,42 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../utils/api"; // Assuming your API functions are in api.js
-
+import Message from "../components/common/Message";
+import AuthAPI from "../api/authAPI";
+import { useFlash } from "../components/common/FlashContext";
+import Loading from "../components/common/Loading";
+import { useAPI } from "../hooks/useAPI";
 const Register = () => {
+  const { execute, loading, error } = useAPI();
+  const { addMessage } = useFlash();
   const [formData, setFormData] = useState({
-    username: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     re_password: "",
   });
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null); // Clear previous errors
-    setSuccess(false); // Reset success state
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      await registerUser(formData);
-      setSuccess(true);
-      // Redirect to the login page
-      setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
+      const result = await execute(AuthAPI.register, formData);
+
+      addMessage(
+        "Registration  completed successfully! Now Login and Enjoy!!",
+        "success"
+      );
+      console.log("Registration successful:", result);
+      navigate("/login"); // Redirect to a secure route
     } catch (err) {
-      setError(err.response?.data || "Registration failed. Please try again.");
+      addMessage("Error while registering Please try again.", "error");
+
+      console.error("Error during registering:", err);
     }
   };
 
@@ -40,31 +45,29 @@ const Register = () => {
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Register</h2>
 
-        {error && (
-          <div className="text-red-500 text-sm mb-4">
-            {typeof error === "string" ? error : JSON.stringify(error)}
-          </div>
-        )}
-
-        {success && (
-          <div className="text-green-500 text-sm mb-4">
-            Registration successful! Redirecting to login...
-          </div>
-        )}
-
         <form onSubmit={handleSubmit}>
           <label className="input input-bordered flex items-center gap-2 mt-2">
             <input
               type="text"
-              name="username"
-              value={formData.username}
+              name="first_name"
+              value={formData.first_name}
               onChange={handleChange}
               className="grow bg-transparent"
-              placeholder="Username"
+              placeholder="First Name"
               required
             />
           </label>
-
+          <label className="input input-bordered flex items-center gap-2 mt-2">
+            <input
+              type="text"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              className="grow bg-transparent"
+              placeholder="Last Name"
+              required
+            />
+          </label>
           <label className="input input-bordered flex items-center gap-2 mt-2">
             <input
               type="email"
@@ -102,7 +105,7 @@ const Register = () => {
           </label>
 
           <button type="submit" className="btn btn-primary w-full mt-4">
-            Register
+            {loading ? <Loading></Loading> : "Register"}
           </button>
         </form>
 

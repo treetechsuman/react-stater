@@ -1,91 +1,61 @@
-import React , { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchUserProfile } from "../utils/api";
-import useAuth from "../hooks/useAuth";
-import axios from "axios";
+import UserAPI from "../api/userAPI";
+import { useAPI } from "../hooks/useAPI";
+import Message from "../components/common/Message";
+import { useFlash } from "../components/common/FlashContext";
+import Loading from "../components/common/Loading";
 
 const Profile = () => {
-  const [user, setUser] = useState({ first_name: '', last_name: '', email: '' });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
- // const { updateProfile, loading, error } = useAuth();
+  const { execute, loading, error } = useAPI();
+  const [user, setUser] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+  });
+
+  const { addMessage } = useFlash();
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setUser(prevUser => ({
+    setUser((prevUser) => ({
       ...prevUser,
-      [name]: value
+      [name]: value,
     }));
   };
-  const updateProfile = async () => {
-    const accessToken = localStorage.getItem("access_token");
-    if (!accessToken) {
-      setError('Authentication required.');
-      return;
-    }
-  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      // Assuming your API endpoint for updating user profile looks similar to this
-      const response = await axios.put('http://127.0.0.1:8000/auth/users/me/', user, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      console.log('Profile updated successfully:', response.data);
-      // Maybe set user state if response includes updated data
-      setUser(response.data);
-      setSuccess(true);
+      const result = await execute(UserAPI.updateProfile, user);
+      addMessage("Profile updated successfully!", "success");
     } catch (error) {
-      console.error('Error updating profile:', error);
-      setError('Failed to update profile.');
+      console.error("Error updating profile:", error);
+      addMessage("An error occurred. Please try again.", "error");
     }
   };
+  //alert(localStorage.getItem("refresh_token"));
 
   useEffect(() => {
-    const loadUserProfile = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      if (!accessToken) {
-        setError('Authentication required.');
-        return;
-      }
-  
+    const fetchUserDetails = async () => {
       try {
-        //alert(accessToken)
-        const response = await fetchUserProfile(accessToken);
-        console.log("API Response:", response.data); // Again, checking the actual data received
-        //alert(response.data)
-        setUser(response.data);
+        const userDetails = await execute(UserAPI.getUserDetails);
+        setUser(userDetails);
+        addMessage("Profile loaded successfully!", "success");
       } catch (error) {
-        console.error("Error accessing protected endpoint:", error);
-        setError('Error fetching user profile.');
+        console.error("Error fetching user details:", error);
+        addMessage("Error fetching user details:", "error");
       }
     };
-  
-    loadUserProfile();
-  }, []);
-  if (error) {
-    return <div className="error">{error}</div>;
-  }
+    fetchUserDetails();
+  }, [execute]);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
   return (
     <div className="min-h-fit flex items-center justify-center">
       <div className="p-6 rounded-md shadow-md w-full max-w-md">
         <h2 className="text-center text-2xl font-bold mb-4">Profile</h2>
-        <h2 className="text-center text-2xl font-bold mb-4">wel come {user.email}</h2>
+        <h2 className="text-center text-2xl font-bold mb-4">
+          wel come {user.email}
+        </h2>
 
-        {error && (
-          <div className="text-red-500 text-sm mb-4">
-            {typeof error === "string" ? error : JSON.stringify(error)}
-          </div>
-        )}
-
-        {success && (
-          <div className="text-green-500 text-sm mb-4">
-            Update successful!
-          </div>
-        )}
         <label className="input input-bordered flex items-center gap-2 mt-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -106,10 +76,9 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="First Name"
-            value={user.first_name}
+            value={user.first_name || ""}
             name="first_name"
             onChange={handleChange}
-            
           />
         </label>
         <label className="input input-bordered flex items-center gap-2 mt-2">
@@ -132,7 +101,7 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="Last Name"
-            value={user.last_name}
+            value={user.last_name || ""}
             name="last_name"
             onChange={handleChange}
           />
@@ -151,16 +120,17 @@ const Profile = () => {
             type="text"
             className="grow bg-transparent"
             placeholder="Email"
-            value={user.email}
+            value={user.email || ""}
             name="email"
             onChange={handleChange}
             disabled
           />
         </label>
-        <button className="btn btn-primary w-full mt-4" onClick={updateProfile}>Update</button>
+        <button className="btn btn-primary w-full mt-4" onClick={handleSubmit}>
+          {loading ? <Loading></Loading> : "Update"}
+        </button>
         {/* Reset password Links */}
         <div className="mt-4 text-center">
-        {error && <p style={{ color: 'red' }}>{error}</p>}
           <Link to="/resetpassword" className="text-sm hover:underline">
             Reset password
           </Link>
