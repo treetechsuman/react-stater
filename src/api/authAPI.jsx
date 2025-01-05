@@ -20,6 +20,13 @@ const AuthAPI = {
     return response.data;
   },
 
+  setPassword: async (passwords) => {
+    const response = await apiClient.post("/auth/users/set_password/", {
+      passwords,
+    });
+    return response.data;
+  },
+
   logout: () => {
     //alert("logout called")
     localStorage.removeItem("access_token");
