@@ -28,7 +28,10 @@ run in 192.168.1.105:5173 (in vite.config.js)
     what this will do?
     create ComponentName compoent in components/common folder
     -if you wanna create component in side coustom just do custom/CompoentName
-
+ To generate form componet run
+    npm run generate:form FormNameForm
+    what this will do?
+    create form compoent in components/forms folder
 
     {/* Social Media Login Buttons */}
         <div className="mt-4 text-center">

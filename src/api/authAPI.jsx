@@ -21,9 +21,11 @@ const AuthAPI = {
   },
 
   setPassword: async (passwords) => {
-    const response = await apiClient.post("/auth/users/set_password/", {
-      passwords,
-    });
+    console.log(passwords);
+    const response = await apiClient.post(
+      "/auth/users/set_password/",
+      passwords
+    );
     return response.data;
   },
 
