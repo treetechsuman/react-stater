@@ -1,3 +1,4 @@
+import SetPassword from "./pages/SetPassword";
 import Logout from "./pages/Logout";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -40,6 +41,7 @@ export const hiddenLinks = [
     component: ForgotPassword,
   },
   { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
+  { label: "SetPassword", path: "/setpassword", component: SetPassword },
 ];
 
 export const proctedLinks = [

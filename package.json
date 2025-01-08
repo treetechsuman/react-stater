@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "generate:page": "node generatePage.js",
-    "generate:component": "node generateComponent.js"
+    "generate:component": "node generateComponent.js",
+    "generate:form": "node generateForm.js"
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
