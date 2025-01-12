@@ -1,7 +1,7 @@
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 import SetPassword from "./pages/SetPassword";
 import Logout from "./pages/Logout";
-import ResetPassword from "./pages/ResetPassword";
+
 import ForgotPassword from "./pages/ForgotPassword";
 
 import Register from "./pages/Register";
@@ -23,11 +23,11 @@ export const brand = {
 export const links = [
   { label: "Home", path: "/", component: Home },
   { label: "About", path: "/about", component: About },
-  { label: "Login", path: "/login", component: Login },
+ 
   { label: "Register", path: "/register", component: Register },
 
-  { label: "Logout", path: "/logout", component: Logout },
-  { label: "ResetPasswordConfirm", path: "/password-reset/confirm/:uid/:token", component: ResetPasswordConfirm }, 
+  
+ 
 ];
 
 export const bottomLinks = [
@@ -42,15 +42,11 @@ export const hiddenLinks = [
     path: "/forgotpassword",
     component: ForgotPassword,
   },
-  
-  { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
+  { label: "Login", path: "/login", component: Login },
+  { label: "Logout", path: "/logout", component: Logout },
+  { label: "ResetPasswordConfirm", path: "/password-reset/confirm/:uid/:token", component: ResetPasswordConfirm }, 
   { label: "SetPassword", path: "/setpassword", component: SetPassword },
-  { label: "ResetPassword", path: "/resetpassword", component: ResetPassword },
-  {
-    label: "ForgotPassword",
-    path: "/forgotpassword",
-    component: ForgotPassword,
-  },
+  
 ];
 
 export const proctedLinks = [

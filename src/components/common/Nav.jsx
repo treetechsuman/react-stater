@@ -3,10 +3,11 @@ import ThemeToggle from "./ThemeToggle";
 import { Link, NavLink } from "react-router-dom";
 import BarIcon from "./icons/BarIcon";
 import CrossIcon from "./icons/CrossIcon"; // Assuming you have a CrossIcon component
+import { useAuth } from "./AuthContext"
 const Nav = ({ brand, links }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const { isAuthenticated , logout} = useAuth();
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -60,6 +61,18 @@ const Nav = ({ brand, links }) => {
                   </NavLink>
                 </li>
               ))}
+              {/* Conditionally render Login or Logout */}
+              {!isAuthenticated ? (
+                <li>
+                  <NavLink to="/login" onClick={closeDropdown}>
+                    Login
+                  </NavLink>
+                </li>
+              ) : (
+                <li>
+                  <button onClick={logout}>Logout</button>
+                </li>
+              )}
             </ul>
           )}
         </div>
@@ -83,6 +96,11 @@ const Nav = ({ brand, links }) => {
       </div>
       <div className="navbar-end">
         <a className="btn btn-sm">Button</a>
+        {!isAuthenticated ? (
+               <a className="btn btn-sm">Login</a>
+              ) : (
+                <a className="btn btn-sm" onClick={logout}>Logout</a>
+              )}
         <ThemeToggle></ThemeToggle>
       </div>
     </div>

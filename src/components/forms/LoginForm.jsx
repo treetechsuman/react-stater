@@ -6,8 +6,9 @@ import { rules } from "../../utils/validation";
 import Loading from "../common/Loading";
 import AuthAPI from "../../api/authAPI";
 import { useFlash } from "../common/FlashContext";
-
+import { useAuth } from "../common/AuthContext";
 const LoginForm = ({ title = "Login" }) => {
+  const { contextLogin} = useAuth();
   const navigate = useNavigate();
   const { addMessage } = useFlash();
   const { execute, loading, error } = useAPI();
@@ -43,6 +44,7 @@ const LoginForm = ({ title = "Login" }) => {
       const result = await execute(AuthAPI.login, formData);
       addMessage("Login successful", "success");
       console.log("Login successful:", result);
+      contextLogin(localStorage.getItem("access_token"));
       navigate("/profile"); // Redirect to a secure route
     } catch (err) {
       console.error("Error during action:", err);
@@ -62,6 +64,7 @@ const LoginForm = ({ title = "Login" }) => {
             type="email"
             validationRules={[rules.required, rules.email]}
             onValueChange={handleValueChange}
+            
           />
           <Input
             ref={inputRefs.password}
@@ -70,6 +73,7 @@ const LoginForm = ({ title = "Login" }) => {
             type="password"
             validationRules={[rules.required, rules.min(6)]}
             onValueChange={handleValueChange}
+          
           />
           <button
             type="submit"

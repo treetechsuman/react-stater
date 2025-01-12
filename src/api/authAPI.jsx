@@ -1,12 +1,15 @@
 import apiClient from "./apiClient";
+
 import axios from "axios";
 
 const AuthAPI = {
+   
   login: async (credentials) => {
     const response = await apiClient.post("/auth/jwt/create/", credentials);
     const { access, refresh } = response.data;
     localStorage.setItem("access_token", access);
     localStorage.setItem("refresh_token", refresh);
+    //setIsAuthenticated(true);
     //alert("autha api login token"+localStorage.getItem("refresh_token"))
     return response.data;
   },

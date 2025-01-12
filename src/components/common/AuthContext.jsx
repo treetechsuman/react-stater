@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-
+import AuthAPI from "../../api/authAPI"
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -18,7 +18,10 @@ export const AuthProvider = ({ children }) => {
     };
     checkAuth();
   }, []);
-
+  const contextLogin = (token) => {
+    localStorage.setItem("access_token", token);
+    setIsAuthenticated(true);
+  };
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -27,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, logout,contextLogin  }}>
       {children}
     </AuthContext.Provider>
   );

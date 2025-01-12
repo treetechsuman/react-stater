@@ -5,9 +5,10 @@ import { rules } from "../../utils/validation";
 import Loading from "../common/Loading";
 import { useFlash } from "../common/FlashContext";
 import UserAPI from "../../api/userAPI";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfileForm = ({ title = "Profile" }) => {
+  const navigate = useNavigate();
   const { execute, loading, error } = useAPI();
   const { addMessage } = useFlash();
   const [formData, setFormData] = useState({});
@@ -31,7 +32,8 @@ const ProfileForm = ({ title = "Profile" }) => {
         addMessage("Profile loaded test successfully!", "success");
       } catch (error) {
         console.error("Error fetching user details:", error);
-        addMessage("Error fetching user details:", "error");
+        addMessage("Error fetching user details Please login:", "error");
+        navigate("/login"); // Redirect to login
       }
     };
     fetchUserDetails();
@@ -58,8 +60,10 @@ const ProfileForm = ({ title = "Profile" }) => {
       addMessage("Profile updated successfully!", "success");
       console.log("Action successful:", result);
     } catch (err) {
+      
       console.error("Error updating profile:", err);
       addMessage("An error occurred. Please try again.", "error");
+      
     }
     console.log("Form submitted:", formData);
   };
