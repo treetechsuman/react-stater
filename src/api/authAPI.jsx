@@ -2,7 +2,7 @@ import apiClient from "./apiClient";
 
 import axios from "axios";
 const API_URL = "http://127.0.0.1:8000/";
-//const API_URL = "http://127.0.0.1:8000/"; //production 
+//const API_URL = "https://mesumandahal.pythonanywhere.com/"; //production 
 const AuthAPI = {
    
   login: async (credentials) => {
