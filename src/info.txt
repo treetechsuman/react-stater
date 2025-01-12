@@ -45,3 +45,9 @@ run in 192.168.1.105:5173 (in vite.config.js)
             Login with Google
           </GoogleLogin>
         </div>
+
+curl -X POST http://127.0.0.1:8000/auth/users/reset_password/ \
+-H "Content-Type: application/json" \
+-H "X-CSRFToken: OH16wmMFnjA6TWoPMLQU1fctyBjtqVs4qAh3ulJTy23XXJ3mXVS8H9mwB5nrsKD0" \
+-b "csrftoken=OH16wmMFnjA6TWoPMLQU1fctyBjtqVs4qAh3ulJTy23XXJ3mXVS8H9mwB5nrsKD0" \
+-d '{"email": "me.suman11@gmail.com"}'

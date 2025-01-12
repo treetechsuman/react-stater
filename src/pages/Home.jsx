@@ -1,11 +1,11 @@
 import React from "react";
-import SetPasswordForm from "../components/forms/SetPasswordForm";
+import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
 
 const Home = ({}) => {
   return (
     <>
       <h1>Home</h1>
-      <SetPasswordForm />
+      <ForgotPasswordForm />
     </>
   );
 };

@@ -1,22 +1,24 @@
-import React, { useState, useRef } from "react";
+
+import React, { useState , useRef } from "react";
 import Input from "../common/Input";
 import { useAPI } from "../../hooks/useAPI";
 import { rules } from "../../utils/validation";
 import Loading from "../common/Loading";
 import { useFlash } from "../common/FlashContext";
 import AuthAPI from "../../api/authAPI";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-const SetPasswordForm = ({ title = "Set new password" }) => {
+const ResetPasswordConfirmForm = ({ title = "Enter New Password" }) => {
   const navigate = useNavigate();
   const { execute, loading, error } = useAPI();
   const { addMessage } = useFlash();
   const [formData, setFormData] = useState({});
   const inputRefs = {
-    current_password: useRef(null),
-    new_password: useRef(null),
-    re_new_password: useRef(null),
+      new_password: useRef(null),
+      re_new_password: useRef(null),
   };
+  const { uid, token } = useParams(); // Extract uid and token from the URL
 
   const handleValueChange = (name, value, error) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -25,7 +27,7 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate all fields
+     // Validate all fields
     const errors = Object.keys(inputRefs).reduce((acc, key) => {
       const error = inputRefs[key].current.validate(); // Call validate method
       if (error) acc[key] = error;
@@ -36,21 +38,22 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
       console.log("Form has errors:", errors);
       return;
     }
+    // Append uid and token to formData
+    const completeFormData = {
+      ...formData,
+      uid,    // Add uid from URL
+      token,  // Add token from URL
+    };
 
     // Proceed with API submission
     try {
-      const result = await execute(AuthAPI.setPassword, formData);
-      addMessage("Password reset successful", "success");
+      const result = await execute(AuthAPI.resetPasswordConfirm, completeFormData);
+      addMessage("Password change successful", "success");
       console.log("Action successful:", result);
       navigate("/login"); // Redirect to login
     } catch (err) {
-      console.error("Error updating profile:", err);
-      console.error("Responce updating profile:", err.response);
-      addMessage(
-        "An error occurred. Please try again." +
-          JSON.stringify(err.response.data, null, 2),
-        "error"
-      );
+      console.error("Error during action:", err);
+      addMessage("Something went wrong try again", "error");
     }
     console.log("Form submitted:", formData);
   };
@@ -61,16 +64,6 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
         <h2 className="text-center text-2xl font-bold mb-4">{title}</h2>
         <form onSubmit={handleSubmit}>
           <Input
-            ref={inputRefs.current_password}
-            name="current_password"
-            label="Current Password"
-            type="password"
-            placeholder="Type here"
-            value={formData.current_password || ""}
-            validationRules={[rules.required, rules.min(8)]}
-            onValueChange={handleValueChange}
-          />
-          <Input
             ref={inputRefs.new_password}
             name="new_password"
             label="New Password"
@@ -78,7 +71,7 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
             placeholder="Type here"
             value={formData.new_password || ""}
             validationRules={[rules.required, rules.min(8)]}
-            onValueChange={handleValueChange}
+            onValueChange={handleValueChange}    
           />
           <Input
             ref={inputRefs.re_new_password}
@@ -87,18 +80,15 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
             type="password"
             placeholder="Type here"
             value={formData.re_new_password || ""}
-            validationRules={[
-              rules.required,
-              rules.confirmPassword(formData.new_password),
-            ]}
+            validationRules={[rules.required, rules.confirmPassword(formData.new_password)]}
             onValueChange={handleValueChange}
           />
           <button
             type="submit"
-            className="btn btn-warning w-full mt-6"
+            className="btn btn-primary w-full mt-6"
             disabled={loading}
           >
-            {loading ? <Loading /> : "Set new password"}
+            {loading ? <Loading /> : "Submit"}
           </button>
         </form>
       </div>
@@ -106,4 +96,4 @@ const SetPasswordForm = ({ title = "Set new password" }) => {
   );
 };
 
-export default SetPasswordForm;
+export default ResetPasswordConfirmForm;
