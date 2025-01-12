@@ -13,6 +13,9 @@ import Search from "./pages/Search";
 import Login from "./pages/Login";
 import { HomeIcon, SearchIcon, ProfileIcon } from "./components/common/icons";
 
+
+//export const API_BASE_URL = "http://127.0.0.1:8000/";
+//export const FRONTEND_BASE_URL = "http://192.168.1.105:5173";
 //import { FaSearch, FaHome, FaRegBell, FaAddressBook, FaUser } from "react-icons/fa";
 export const brand = {
   name: "Work Log",
@@ -60,3 +63,5 @@ export const navSettings = {
 export const appSettings = {
   isDevelopment: false,
 };
+
+

@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./components/common/AuthContext";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import { FlashProvider, useFlash } from "./components/common/FlashContext";
+
 function App() {
   return (
     <ThemeProvider>

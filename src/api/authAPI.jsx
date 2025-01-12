@@ -1,7 +1,8 @@
 import apiClient from "./apiClient";
 
 import axios from "axios";
-
+const API_URL = "http://127.0.0.1:8000/";
+//const API_URL = "http://127.0.0.1:8000/"; //production 
 const AuthAPI = {
    
   login: async (credentials) => {
@@ -22,12 +23,12 @@ const AuthAPI = {
   resetPassword: async (email) => {
     
       // Step 1: Get the CSRF token
-      const result = await axios.get("http://127.0.0.1:8000/auth/csrf-token/");
+      const result = await axios.get(API_URL+"auth/csrf-token/");
       const csrfToken = result.data.csrfToken; // Ensure the token is retrieved correctly
      
       // Step 2: Send the password reset request
       const response = await axios.post(
-        "http://127.0.0.1:8000/auth/users/reset-password/",
+        API_URL+"auth/users/reset-password/",
         email , // Wrap email in an object
         {
           headers: {
@@ -50,7 +51,7 @@ const AuthAPI = {
    
     // Step 2: Send the password reset request
     const response = await axios.post(
-      "http://127.0.0.1:8000/auth/users/reset_password_confirm/",
+       API_URL+"auth/users/reset_password_confirm/",
       formData , // Wrap email in an object
       {
         headers: {
