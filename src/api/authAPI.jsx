@@ -19,6 +19,10 @@ const AuthAPI = {
     const response = await apiClient.post("/auth/users/", userData);
     return response.data;
   },
+  deleteAccount: async (formData) => {
+    const response = await apiClient.delete("/auth/users/me/", formData);
+    return response.data;
+  },
 
   resetPassword: async (email) => {
     
@@ -45,11 +49,6 @@ const AuthAPI = {
   },
   resetPasswordConfirm: async (formData) => {
     
-    // Step 1: Get the CSRF token
-    //const result = await axios.get("http://127.0.0.1:8000/auth/csrf-token/");
-    //const csrfToken = result.data.csrfToken; // Ensure the token is retrieved correctly
-   
-    // Step 2: Send the password reset request
     const response = await axios.post(
        API_URL+"auth/users/reset_password_confirm/",
       formData , // Wrap email in an object
@@ -65,6 +64,24 @@ const AuthAPI = {
 
     return response.data;
   
+},
+activateAccount: async (formData) => {
+    
+  const response = await axios.post(
+     API_URL+"auth/users/activation/",
+    formData , // Wrap email in an object
+    {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        //"X-CSRFTOKEN" : csrfToken, // Include CSRF token in the header
+      
+      },
+    }
+  );
+
+  return response.data;
+
 },
 
   setPassword: async (passwords) => {

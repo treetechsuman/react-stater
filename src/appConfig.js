@@ -1,11 +1,11 @@
+import ActivateAccount from './pages/ActivateAccount';
+import DeleteAccount from './pages/DeleteAccount';
+
 import ResetPasswordConfirm from './pages/ResetPasswordConfirm';
 import SetPassword from "./pages/SetPassword";
 import Logout from "./pages/Logout";
-
 import ForgotPassword from "./pages/ForgotPassword";
-
 import Register from "./pages/Register";
-// src/config/navConfig.js
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -13,12 +13,8 @@ import Search from "./pages/Search";
 import Login from "./pages/Login";
 import { HomeIcon, SearchIcon, ProfileIcon } from "./components/common/icons";
 
-
-//export const API_BASE_URL = "http://127.0.0.1:8000/";
-//export const FRONTEND_BASE_URL = "http://192.168.1.105:5173";
-//import { FaSearch, FaHome, FaRegBell, FaAddressBook, FaUser } from "react-icons/fa";
 export const brand = {
-  name: "Work Log",
+  name: "React Starter App",
   path: "/",
 };
 
@@ -28,9 +24,8 @@ export const links = [
   { label: "About", path: "/about", component: About },
  
   { label: "Register", path: "/register", component: Register },
-
-  
- 
+    { label: "DeleteAccount", path: "/deleteaccount", component: DeleteAccount },
+    { label: "ActivateAccount", path: "/activate/:uid/:token", component: ActivateAccount },
 ];
 
 export const bottomLinks = [

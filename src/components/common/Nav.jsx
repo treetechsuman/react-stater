@@ -97,7 +97,7 @@ const Nav = ({ brand, links }) => {
       <div className="navbar-end">
         <a className="btn btn-sm">Button</a>
         {!isAuthenticated ? (
-               <a className="btn btn-sm">Login</a>
+               <Link to="/login" className="btn btn-sm">Login</Link>
               ) : (
                 <a className="btn btn-sm" onClick={logout}>Logout</a>
               )}
