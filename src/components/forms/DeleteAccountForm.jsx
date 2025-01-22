@@ -5,13 +5,14 @@ import { useAPI } from "../../hooks/useAPI";
 import { rules } from "../../utils/validation";
 import Loading from "../common/Loading";
 import { useFlash } from "../common/FlashContext";
+import AuthAPI from '../../api/authAPI';
 
 const DeleteAccountForm = ({ title = "Delete Account" }) => {
   const { execute, loading, error } = useAPI();
   const { addMessage } = useFlash();
   const [formData, setFormData] = useState({});
   const inputRefs = {
-      current_password: useRef(null),
+    current_password: useRef(null),
   };
 
   const handleValueChange = (name, value, error) => {
@@ -35,12 +36,12 @@ const DeleteAccountForm = ({ title = "Delete Account" }) => {
 
     // Proceed with API submission
     try {
-      //const result = await execute(API.function, formData);
-      //addMessage("Flash message successful", "success");
+      const result = await execute(AuthAPI.deleteAccount, formData);
+      addMessage("Account has been deleted successfully", "success");
       console.log("Action successful:", result);
     } catch (err) {
       console.error("Error during action:", err);
-      //addMessage("Flash message error", "error");
+      addMessage("Error Occure try again", "error");
     }
     console.log("Form submitted:", formData);
   };
@@ -54,7 +55,7 @@ const DeleteAccountForm = ({ title = "Delete Account" }) => {
             ref={inputRefs.current_password}
             name="current_password"
             label="Password"
-            type="Password"
+            type="password"
             placeholder="Type here"
             value={formData.current_password || ""}
             validationRules={[rules.required, rules.min(6)]}

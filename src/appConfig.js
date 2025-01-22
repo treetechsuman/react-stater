@@ -24,8 +24,7 @@ export const links = [
   { label: "About", path: "/about", component: About },
  
   { label: "Register", path: "/register", component: Register },
-    { label: "DeleteAccount", path: "/deleteaccount", component: DeleteAccount },
-    { label: "ActivateAccount", path: "/activate/:uid/:token", component: ActivateAccount },
+    
 ];
 
 export const bottomLinks = [
@@ -44,6 +43,8 @@ export const hiddenLinks = [
   { label: "Logout", path: "/logout", component: Logout },
   { label: "ResetPasswordConfirm", path: "/password-reset/confirm/:uid/:token", component: ResetPasswordConfirm }, 
   { label: "SetPassword", path: "/setpassword", component: SetPassword },
+  { label: "DeleteAccount", path: "/deleteaccount", component: DeleteAccount },
+  { label: "ActivateAccount", path: "/activate/:uid/:token", component: ActivateAccount },
   
 ];
 
